@@ -23,3 +23,7 @@ If you want to use lxd:
 ## Install the resulting .snap (in devmode)
 
 `snap install --devmode gdrive_<version>_amd64.snap`
+
+## Launch !
+
+`gdrive`
