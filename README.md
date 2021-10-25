@@ -8,9 +8,8 @@ I decided to use the jackhammer: Snapcraft. In order to create a whole new app. 
 
 Thanks to Brave being awesome and open source, a [snapcraft.yaml](https://github.com/brave/brave-browser-snap) was available for snaping brave.
 
-I just changed the snapcraft.yaml to rename the snap app name, added a part to dump gdrive.desktop and a google_drive.png file at the right spot,
-in the snap usr/share/ folder.
-
+I changed the snapcraft.yaml to rename the snap app name, added a part with the dump plugin to move the gdrive.desktop and google_drive.png files to the right spot,
+in the snap usr/share/ folder. Also added the drive.google.com url to the default brave command, and that was it.
 
 
 ## Build the snap
@@ -27,3 +26,7 @@ If you want to use lxd:
 ## Launch !
 
 `gdrive`
+
+# More
+
+This snap could probably be optimized in size, considering my use of the web app. I don't need the browser audio capability for example.
