@@ -1,10 +1,10 @@
 # Building my own Gdrive web app using Snapcraft and Brave browser
 
-Okay so I wanted to create a web app completely separated from my usual browser instance, so that I can switch to this app (Google Drive) more easily during my workflow (I using 
+Okay so I wanted to create a web app completely separated from my usual browser instance, so that I can switch to this app (Google Drive) more easily during my workflow (I am using 
 GNOME as my desktop manager).
 
-After a failure to create fake apps playing with the WN_CLASS and xdotool,
-I decided to use the jackhammer: a whole new web app with Snapcraft.
+After a failure to create fake apps playing with the WM_CLASS and xdotool,
+I decided to use the jackhammer: Snapcraft. In order to create a whole new app. The resulting snap is of size 260MB.
 
 Thanks to Brave being awesome and open source, a [snapcraft.yaml](https://github.com/brave/brave-browser-snap) was available for snaping brave.
 
