@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Drive
+Keywords=Cloud,Google,Gdrive
+Version=1.0
+Type=Application
+MimeType=application
+Terminal=false
+Exec=/snap/bin/gdrive
+Icon=/usr/share/icons/hicolor/512x512/apps/gdrive.png
+StartupWMClass=Drive

@@ -1,0 +1,177 @@
+name: gdrive
+version: 1.31.87
+grade: stable
+architectures:
+  - build-on: amd64
+summary: Google Drive web app by me
+description: |
+ This is my web app of Google Drive
+confinement: strict
+compression: lzo
+base: core18
+apps:
+  gdrive:
+    command: bin/desktop-launch $SNAP/opt/brave.com/brave/brave-browser --class=Drive https://drive.google.com
+    desktop: usr/share/applications/gdrive.desktop
+    environment:
+      DISABLE_WAYLAND: 1
+      # BRAVE_DESKTOP: brave-browser.desktop
+      BRAVE_CONFIG_HOME: $SNAP_USER_COMMON
+    plugs:
+      - audio-playback
+      - audio-record
+      - bluez
+      - camera
+      - cups-control
+      - desktop
+      - desktop-legacy
+      - gsettings
+      - home
+      - joystick
+      - mount-observe
+      - network
+      - network-manager
+      - opengl
+      - password-manager-service
+      - pulseaudio
+      - raw-usb
+      - removable-media
+      - screen-inhibit-control
+      - u2f-devices
+      - unity7
+      - upower-observe
+      - wayland
+      - x11
+    slots:
+      - mpris
+plugs:
+  browser-sandbox:
+    interface: browser-support
+    allow-sandbox: true
+  gtk-3-themes:
+    interface: content
+    target: $SNAP/data-dir/themes
+    default-provider: gtk-common-themes
+  icon-themes:
+    interface: content
+    target: $SNAP/data-dir/icons
+    default-provider: gtk-common-themes
+  sound-themes:
+    interface: content
+    target: $SNAP/data-dir/sounds
+    default-provider: gtk-common-themes
+parts:
+  desktop:
+    plugin: dump
+    source: .
+    organize:
+      gdrive.desktop: usr/share/applications/gdrive.desktop
+      google_drive.png: usr/share/icons/hicolor/512x512/apps/gdrive.png
+    after: [brave]
+  brave:
+    plugin: dump
+    source: https://github.com/brave/brave-browser/releases/download/v$SNAPCRAFT_PROJECT_VERSION/brave-browser_$SNAPCRAFT_PROJECT_VERSION_amd64.deb
+    after: [desktop-gtk3, gtk-key-themes]
+    stage-packages:
+      - libgbm1
+      - libgl1-mesa-glx
+      - libgtk-3-0
+      - libnss3
+      - libsecret-1-0
+      - libxss1
+      - pulseaudio
+      - shared-mime-info
+      - ubuntu-settings
+      - fonts-liberation
+    override-pull: |
+      set -eu
+      snapcraftctl pull
+      chmod 0755 ./opt/brave.com/brave/chrome-sandbox
+      rm -rf etc/cron.daily/ usr/bin/brave-browser usr/bin/brave-browser-stable
+    prime:
+      - -etc/gss
+      - -etc/init.d
+      - -etc/sensors.d
+      - -etc/ucf.conf
+      - -etc/xdg
+      - -usr/include
+      - -usr/lib/tmpfiles.d
+      - -usr/share/apport
+      - -usr/share/bash-completion
+      - -usr/share/bug
+      - -usr/share/doc
+      - -usr/share/doc-base
+      - -usr/share/gettext
+      - -usr/share/gnome-control-center
+      - -usr/share/GConf
+      - -usr/share/icons
+      - -usr/share/lintian
+      - -usr/share/man
+      - -usr/share/pam-configs
+      - -usr/share/pkgconfig
+      - -usr/share/polkit-1
+      - -usr/share/session-migration
+      - -usr/share/sounds
+      - -usr/share/ubuntu
+      - -usr/share/ubuntu-wayland
+      - -usr/share/upstart
+      - -usr/share/zsh
+      - -var
+      - -opt/brave.com/brave/chrome-sandbox
+  desktop-gtk3:
+    source: https://github.com/ubuntu/snapcraft-desktop-helpers.git
+    source-subdir: gtk
+    plugin: make
+    make-parameters: ["FLAVOR=gtk3"]
+    build-packages:
+      - build-essential
+      - libgtk-3-dev
+    stage-packages:
+      - libxkbcommon0
+      - ttf-ubuntu-font-family
+      - shared-mime-info
+      - libgtk-3-0
+      - libgdk-pixbuf2.0-0
+      - libglib2.0-bin
+      - libgtk-3-bin
+      - unity-gtk3-module
+      - locales-all
+      - xdg-user-dirs
+      - ibus-gtk3
+      - libibus-1.0-5
+      - fcitx-frontend-gtk3
+    prime:
+      - -etc/gss
+      - -etc/presage.xml
+      - -etc/ucf.conf
+      - -etc/X11
+      - -usr/lib/glib-networking
+      - -usr/lib/systemd
+      - -usr/share/apport
+      - -usr/share/bash-completion
+      - -usr/share/doc
+      - -usr/share/doc-base
+      - -usr/share/gettext
+      - -usr/share/GConf
+      - -usr/share/icons
+      - -usr/share/lintian
+      - -usr/share/man
+      - -usr/share/pkgconfig
+      - -usr/share/presage
+      - -usr/share/upstart
+      - -var
+  shared-mime-info:
+    after: [brave]
+    plugin: nil
+    override-pull: ""
+    override-prime: |
+      set -eu
+      glib-compile-schemas usr/share/glib-2.0/schemas
+      update-mime-database usr/share/mime
+  gtk-key-themes:
+    plugin: nil
+    stage-packages:
+      - libgtk-3-common
+    prime:
+      - usr/share/themes/Default/
+      - usr/share/themes/Emacs/
